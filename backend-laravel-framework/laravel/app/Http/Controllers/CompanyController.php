@@ -60,26 +60,14 @@ class CompanyController extends Controller
         $company->address = $request->address;
 
         if($request->image) {
-            $company_image = 'company_url_' . uniqid() . '.webp';
+            $company_image = 'company_url_' . uniqid() . $request->image->extension();
             $request->image->storeAs('public/Company', $company_image);
-
-            $manager = new ImageManager(new Driver());
-            $image = $manager->read(storage_path('app/public/Company/' . $company_image));
-            $encoded = $image->toWebp(60);
-            Storage::put('public/Company/' . $company_image, $encoded);
-
             $company->image = $company_image;
         }
 
         if($request->banner) {
-            $banner_image = 'company_url_' . uniqid() . '.webp';
+            $banner_image = 'company_url_' . uniqid() . $request->banner->extension();
             $request->banner->storeAs('public/Company', $banner_image);
-
-            $manager = new ImageManager(new Driver());
-            $image = $manager->read(storage_path('app/public/Company/' . $banner_image));
-            $encoded = $image->toWebp(60);
-            Storage::put('public/Company/' . $banner_image, $encoded);
-
             $company->banner = $banner_image;
         }
 
@@ -144,14 +132,8 @@ class CompanyController extends Controller
             if($company->image && Storage::exists('public/Company/' . $company->image)) {
                 Storage::delete('public/Company/' . $company->image);
             }
-            $company_image = 'company_url_' . uniqid() . '.webp';
+            $company_image = 'company_url_' . uniqid() . $request->image->extension();
             $request->image->storeAs('public/Company', $company_image);
-
-            $manager = new ImageManager(new Driver());
-            $image = $manager->read(storage_path('app/public/Company/' . $company_image));
-            $encoded = $image->toWebp(60);
-            Storage::put('public/Company/' . $company_image, $encoded);
-
             $company->image = $company_image;
         }
 
@@ -159,14 +141,8 @@ class CompanyController extends Controller
             if($company->banner && Storage::exists('public/Company/' . $company->banner)) {
                 Storage::delete('public/Company/' . $company->banner);
             }
-            $banner_image = 'company_url_' . uniqid() . '.webp';
+            $banner_image = 'company_url_' . uniqid() . $request->banner->extension();
             $request->banner->storeAs('public/Company', $banner_image);
-
-            $manager = new ImageManager(new Driver());
-            $image = $manager->read(storage_path('app/public/Company/' . $banner_image));
-            $encoded = $image->toWebp(60);
-            Storage::put('public/Company/' . $banner_image, $encoded);
-
             $company->banner = $banner_image;
         }
 

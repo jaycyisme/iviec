@@ -67,14 +67,8 @@ class CandidateRepositoryController extends Controller
         $candidateRepository->status_id = Status::where('name', 'Ứng tuyển')->first()->id;
 
         if($request->cv) {
-            $cv_image = 'cv_url_' . uniqid() . '.webp';
+            $cv_image = 'cv_url_' . uniqid() . $request->cv->extension();
             $request->cv->storeAs('public/CV', $cv_image);
-
-            $manager = new ImageManager(new Driver());
-            $image = $manager->read(storage_path('app/public/CV/' . $cv_image));
-            $encoded = $image->toWebp(60);
-            Storage::put('public/CV/' . $cv_image, $encoded);
-
             $candidateRepository->cv = $cv_image;
         }
 
@@ -149,14 +143,8 @@ class CandidateRepositoryController extends Controller
             if($candidateRepository->cv && Storage::exists('public/CV/' . $candidateRepository->cv)) {
                 Storage::delete('public/CV/' . $candidateRepository->cv);
             }
-            $cv_image = 'cv_url_' . uniqid() . '.webp';
+            $cv_image = 'cv_url_' . uniqid() . $request->cv->extension();
             $request->cv->storeAs('public/CV', $cv_image);
-
-            $manager = new ImageManager(new Driver());
-            $image = $manager->read(storage_path('app/public/CV/' . $cv_image));
-            $encoded = $image->toWebp(60);
-            Storage::put('public/CV/' . $cv_image, $encoded);
-
             $candidateRepository->cv = $cv_image;
         }
 
